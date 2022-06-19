@@ -1,0 +1,270 @@
+body {
+    background: #ffffff;
+}
+/* Prispevky + Sidebar CSS */
+
+h2 {
+    font-family: Arial;
+    font-size: 30px;
+    font-weight: bold;
+    color: #2d2d2d;
+}
+
+a {
+    color: #545454;
+    text-decoration: none;
+}
+a:hover {
+    color: #557C55;
+    text-decoration: none;
+}
+
+.content {
+    width: 90%;
+    margin: 40px auto 40px;
+}
+
+.content .main-content {
+    width: 70%;
+    float: left;
+}
+
+.content .main-content.single {
+    background: white;
+    padding: 20px 50px;
+    font-size: 1.1em;
+    border-radius: 5px;
+}
+
+.content .main-content.single .post-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.content .main-content .post {
+    width: 80%;
+    height: 280px;
+    margin: 20px auto;
+    border-radius: 5px;
+    background: rgba(218, 218, 218, 0.84);
+    box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.content .popular .post {
+    border-top: 1px solid #e0e0e0;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.content .popular .post img {  /* Thumbnail obrazek */
+    height: 60px;
+    width: 70px;
+    float: left;
+    margin-right: 10px;
+}
+
+.content .post img:hover {  /* Zoom obrazku po prejeti */
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+.content .main-content .post .post-preview i {  /* Ikonky */
+    color: #757575;
+    font-size: .8em;
+}
+
+.content .main-content .post .preview-text {  /* Preview text prispevku */
+    line-height: 1.5em;
+    font-size: 1.03em;
+    word-wrap: break-word;
+    word-break: break-word;
+    color: #444;
+}
+
+.content .main-content .post .read-more {  /* Cist clanek tlacitko */
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border: 2px solid #146356;
+    background: transparent;
+    border-radius: 0;
+    color: black;
+    text-decoration: none;
+}
+
+.content .main-content .post .read-more:hover {  /* Cist clanek tlacitko hover */
+    background: rgba(0, 89, 2, 0.7);
+    color: #000000 !important;
+    transition: .25s;
+}
+
+.content .main-content .post .post-image {  /* Pozicovani thumbnailu */
+    width: 40%;
+    height: 100%;
+    float: left;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.kategorie { /* Kategorie u prispevku */
+    background: #279b08;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: inline-block;
+    padding: 0 5px 0 5px;
+    vertical-align: middle;
+    line-height: 27px;
+}
+
+
+.content .main-content .post .post-preview {
+    width: 60%;
+    padding: 10px;
+    float: right;
+}
+
+.content .main-content .recent-post-title {
+    margin: 20px;
+}
+
+.content .sidebar {
+    width: 30%;
+    float: left;
+}
+
+.content .sidebar.single {
+    padding: 0px 10px;
+}
+
+.content .sidebar .section {
+    background: rgba(234, 234, 234, 0.84);
+    box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.content .sidebar .section .section-title {
+    margin: 10px 0px 10px 0px;
+}
+
+.content .sidebar .section.search {
+    margin-top: 80px;
+}
+
+.content .sidebar .section.topics ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    border-top: 1px solid #e0e0e0;
+}
+
+.content .sidebar .section.topics ul li a {
+    display: block;
+    padding: 15px 0px 15px 0px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: all 0.3s;
+}
+
+.content .sidebar .section.topics ul li a:hover {
+    padding-left: 20px;
+    transition: all 0.3s;
+}
+
+.hledej {
+    padding: 0.7rem 1rem;
+    width: 100%;
+    border-radius: 5px;
+    border: 3px solid #939393;
+    outline: none;
+    color: #444;
+    line-height: 1.5rem;
+    font-size: 1.2em;
+    font-family: Arial;
+}
+
+.uprava {
+  border: 1px solid  black;
+  width: 400px;
+  height: auto;
+}
+#nahrat-obrazek a { font-size: large;}
+
+#canvas {
+    border: solid 2px #000000;
+    box-shadow: 20px 20px 10px rgb(0 0 0 / 30%);
+}
+
+
+
+
+/* Responzivita Webu */
+
+@media only screen and (max-width: 934px) {
+    .content {
+        width: 100%;
+    }
+
+    .content .main-content .post {
+        width: 100%;
+    }
+
+    .content .main-content {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .content .sidebar {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .content .sidebar .section.search {
+        margin-top: 30px;
+    }
+}
+
+@media only screen and (max-width: 770px) {
+
+
+    .showing {
+        max-height: 100em;
+    }
+
+    header ul li {
+        width: 100%;
+    }
+
+    header ul li ul {
+        position: static;
+        display: block;
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .content .main-content .post {
+        height: auto;
+    }
+
+    .content .main-content.single {
+        padding: 10px 20px;
+    }
+
+    .content .main-content .post .post-image {
+        width: 100%;
+    }
+
+    .content .main-content .post .post-preview {
+        width: 100%;
+
+    }
+
+    .content .main-content .post .read-more {
+        position: static;
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+}

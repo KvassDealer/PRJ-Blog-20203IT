@@ -1,0 +1,89 @@
+body {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+* {  /* Wildcard - vsechny elementy */
+    list-style: none;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.wrapper .sidebar {
+    background: #222831;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 230px;
+    height: 100%;
+    padding: 20px 0;
+    transition: all 0.5s ease;
+
+}
+
+.wrapper .sidebar ul li a {
+    display: block;
+    padding: 13px 30px;
+    color: rgb(241, 237, 237);
+    font-size: 16px;
+    position: relative;
+    left: -30px;
+    width: 115%;
+}
+
+.wrapper .sidebar ul li a .icon{
+    color: #00ADB5;
+    width: 30px;
+    display: inline-block;
+}
+
+.wrapper .sidebar ul li a:hover,
+.wrapper .sidebar ul li a.active{
+    color: #000000;
+    background:white;
+}
+
+.wrapper .sidebar ul li a:hover .icon,
+.wrapper .sidebar ul li a.active .icon{
+    color: #252A34;
+}
+
+.wrapper .sidebar ul li a:hover:before,
+.wrapper .sidebar ul li a.active:before{
+    display: block;
+}
+
+.status {
+    color: black;
+    margin: 0 auto;
+
+}
+.menu {
+    display: none;
+}
+
+@media only screen and (max-width: 1200px) {
+    .status {
+        margin-left: 25%;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .menu {
+        display: inherit;
+    }
+
+    .wrapper .sidebar  {
+        display: none;
+    }
+    #admin {
+        display: none;
+    }
+}
+
+
+

@@ -1,0 +1,24 @@
+img, video {
+   width: 100%;
+   height: auto;
+   margin: 0 auto;
+}
+iframe {
+    width: 100%;
+    height: 512px;
+}
+.figure {
+    width: unset;
+}
+
+.container {
+    margin: 0 auto;
+
+}
+
+@media only screen and (max-width: 600px) {
+    iframe, img {
+        width: 100%;
+        height: auto;
+    }
+}

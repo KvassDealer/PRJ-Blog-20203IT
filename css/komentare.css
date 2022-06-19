@@ -1,0 +1,62 @@
+.komentar {
+    border-bottom: 0;
+}
+.komentar {
+    background: #dbecc8;
+    padding: 3% 20px;
+    margin-bottom: 20px;
+    margin-left: 38%;
+}
+
+.komentar-header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 0.85rem;
+}
+.koment-datum {
+    color: #949494;
+    font-style: italic;
+    padding: 0.8rem 1rem;
+    border: 1px solid #e1e1e1;
+    border-top: 0;
+    border-bottom: 0;
+}
+
+.koment-autor {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-right: 2rem;
+}
+.koment-jmeno {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-weight: 500;
+}
+
+.koment-text p:last-child {
+    margin-bottom: 1rem;
+}
+.koment-text p {
+    margin: 0.5rem 0;
+}
+.koment-obsah {
+    display: none;
+}
+p {
+    line-height: 1.5;
+    font-size: 0.85rem;
+    margin: 1.5rem 0;
+    word-break: break-word;
+}
