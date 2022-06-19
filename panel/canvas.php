@@ -1,13 +1,7 @@
 <?php
 session_start();
-// Pokud nikdo neni prihlasen nebo se pokusi dostat sem, redirect na login
-if (!isset($_SESSION['ID']) && !isset($_SESSION['EMAIL']) && !isset($_SESSION['USERNAME'])) {
-    header("Location: /PRJ-Blog/auth/login.php");
-    exit();
-}
 
 // Databaze
-
 $host = "localhost";
 $username = "root";
 $pass = "";
@@ -19,43 +13,25 @@ $db = "blog";
 $con = mysqli_connect($host,$username,$pass,$db);
 
 // Kontrola pripojeni
+// ID,jmeno,prezdivka,password,email,role
+
 if (!$con || $con->connect_error) {
     die("Pripojeni k databazi selhalo!". $con->connect_error);
 }
 
 ?>
-
 <html>
 <head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/bootstrap-grid.css">
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
           integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/design.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.5.0-beta.2/css/lightgallery.min.css" integrity="sha512-J3GvWzuXtDGv7Kmqhj1gbn/jM2i3G40XtSBcqGEQ7eLpP0izHygFgT0FMIVCWMVRZnz7u2rS6mhTtlQ3oJsr1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <script
-            src="https://code.jquery.com/jquery-3.6.0.js"
-            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-            crossorigin="anonymous"></script>
-    <script src="js/bootstrap.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-          td {
-            border: 2px solid black;
-              width: 16.6%;
-              margin-top: 20px;
-
-
-        }
-          table { border: 1px solid black;
-
-
-          }
-    </style>
 </head>
 <body>
-
 <?php
 
 echo "
@@ -89,7 +65,7 @@ echo "
         </a>
     </li>
     <li>
-        <a href='../sprava/canvas_control.php'>
+        <a href='#'>
             <span class='icon'><i class='fas fa-file-powerpoint'></i></span>
             <span class='item'>Planky</span>
         </a>
@@ -192,74 +168,145 @@ echo "
 ?>
 
 <div class="container">
-  <div class="row">
-  
-  <div class="col-xl-10" style="margin-left: 20%"><h2>Vítejte <?php echo $_SESSION['NAME']; ?> Navigujte se pomocí bočního menu</h2></div>
-      <div class="col-xl-5" style="margin-left: 20%"><h1>Vase nakreslene planky:</h1></div>
-
-      <div class="content clearfix">
-          <div class="card-group" style="margin-top: 20px; margin-left: 20%" id="obrazky">
-   <?php
-   $jmeno = $_SESSION['NAME'];
-   $sql = "SELECT * FROM planky WHERE jmeno = '$jmeno'";
-   $dotaz = mysqli_query($con,$sql);
-
-
-   $cislo = 0;
-
-   while ($radek = mysqli_fetch_assoc($dotaz)) {
-       $planek = $radek['planek'];
-                    $uzivatel = $radek['jmeno'];
-                    $id = $radek['ID'];
-                    $vytvoren = $radek['vytvoren'];
-                    $popis = $radek['popis'];
-
-
-           $upravit ="<a href='../sprava/upravit_canvas.php?id=$id'> Upravit  </a>";
-           //$smazat ="<a href='../sprava/smazat_canvas.php?id=$id'> Smazat </a>";
-
-
-
-                    echo "
-           <div class='card'>
-           <div class='obrazky'>
-                <img class='card-img-top' src='./$planek' alt='$planek' id='obrz'>
-                </div>
-                <div class='card-body'>
-                    <h5 class='card-title'>$uzivatel</h5>
-                    <p class='card-text'>$popis</p>
-                    <p class='card-text'><small class='text-muted'>$vytvoren</small></p>
-                    <p class='card-text'><small class='text-muted'>$upravit </small></p>
-                </div>
-            </div> 
-           ";
-                    $cislo++;
-                    if ($cislo % 3 == 0) {
-                        echo "</div><div class='card-group' id='obrazky' style='margin-top: 20px; margin-left: 20%'>";
-                    }
-                }
-
-
-
-
-   ?>
-     </div>
-   </div>
-  </div>
+    <div class="col-xl-12" style="margin-left: 20%">
+        <br>
+        <canvas width="512" height="512"  id="canvas" name="obr"></canvas>
+        <br>
+        <br>
+        <div id="output"></div>
+        <textarea class="form-control" name="popis" id="popis" rows="3" style="width: 30%; color: black"></textarea>
+        <br>
+        <i class="fa fa-download"></i>
+        <a download="planek.jpg" id="nahrat-obrazek" onclick="downloadCanvas(this)">Stahnout obrazek</a>
+        <br>
+        <input type="file" id="nahrat" class="btn btn-dark">
+        <br>
+        <br>
+        <button type="button" id="upload" class="btn btn-dark" onclick="smazat()">Smazat</button>
+        <button type="submit" name="push" class="btn btn-dark" id="push">Odeslat</button>
+    </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.5.0-beta.2/lightgallery.min.js" integrity="sha512-Z3EF+OVry8EO1N1EFn6/j1v+PQJ3UqRJ3X+PEFHhJRd7sbEbxI2mZ1suHiXPiofaH7GiKrIZewfGpO+G98Kq5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script> var elements = document.getElementsByClassName('obrazky');
-    for (let item of elements) {
-        lightGallery(item, {
-            share:false,
-            controls:false,
-            counter:false,
-            enableDrag:false,
-
-        })
-    }
-</script>
 </body>
 </html>
 
+<script>
+
+
+    var imageLoader = document.getElementById('nahrat');
+    imageLoader.addEventListener('change', handleImage, false);
+
+
+
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    var canvasx = $(canvas).offset().left;
+    var canvasy = $(canvas).offset().top;
+    var last_mousex = last_mousey = 0;
+    var mousex = mousey = 0;
+    var mousedown = false;
+    var tooltype = 'draw';
+
+
+
+
+    $(canvas).on('mousedown', function(e) {
+        last_mousex = mousex = parseInt(e.clientX-canvasx);
+        last_mousey = mousey = parseInt(e.clientY-canvasy);
+        mousedown = true;
+    });
+
+
+    $(canvas).on('mouseup', function(e) {
+        mousedown = false;
+    });
+
+    // Pohyb mysi po canvasu + sirka linie
+    $(canvas).on('mousemove', function(e) {
+        mousex = parseInt(e.clientX-canvasx);
+        mousey = parseInt(e.clientY-canvasy);
+        if(mousedown) {
+            ctx.beginPath();
+            if(tooltype==='draw') {
+                ctx.globalCompositeOperation = 'source-over';  // Kreslime pres nakreslene veci
+                ctx.strokeStyle = 'gray';
+                ctx.lineWidth = 5;
+            } else {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = 10;
+            }
+            ctx.moveTo(last_mousex,last_mousey);
+            ctx.lineTo(mousex,mousey);
+            ctx.lineJoin = ctx.lineCap = 'round';
+            ctx.stroke();
+        }
+        last_mousex = mousex;
+        last_mousey = mousey;
+
+        $('#output').html('Pozice: ' +mousex+' '+'X'+' , '+mousey+' '+'Y');
+    });
+
+
+    use_tool = function(tool) {
+        tooltype = tool; //update
+    }
+
+    function handleImage(e){
+        var reader = new FileReader();
+        reader.onload = function(c){
+            var obr = new Image();
+            obr.onload = function(){
+                //canvas.width = obr.width;
+                //canvas.height = obr.height;
+
+                obr.width = canvas.width;
+                obr.height = canvas.height;
+                ctx.drawImage(obr,0,0);
+                alert("Obrazek se nahral!");
+            }
+            obr.src = c.target.result;
+        }
+        reader.readAsDataURL(e.target.files[0]);
+    }
+
+
+
+
+    function smazat() {
+        var canvas=document.getElementById("canvas");
+        var context=canvas.getContext("2d");
+        context.clearRect(0,0,canvas.width,canvas.height);
+        window.location.reload(true);
+    }
+
+     function downloadCanvas(el) {
+        const imageURI = canvas.toDataURL("image/jpg");
+        el.href = imageURI;
+    }
+
+
+
+    $(function(f) {
+        $("#push").click(function() {
+                    var obr_src = canvas.toDataURL("image/png");
+                    console.log(obr_src);
+                    console.log(obr_src.size);
+                    var dataURL = canvas.toDataURL();
+                    var popis = document.getElementById("popis").value;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "canvas_uploader.php",
+                        data: {
+                            canvas_data: dataURL,
+                            popisek: popis
+                        }
+                    }).done(function(o) {
+                        console.log('Ulozeno!');
+                        window.location="panel.php";
+
+                    });
+        });
+    });
+</script>

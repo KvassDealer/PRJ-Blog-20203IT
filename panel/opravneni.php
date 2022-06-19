@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 // Pokud nikdo neni prihlasen nebo se pokusi dostat sem, redirect na login
 if (!isset($_SESSION['ID']) && !isset($_SESSION['EMAIL']) && !isset($_SESSION['USERNAME'])) {
@@ -13,6 +14,7 @@ $username = "root";
 $pass = "";
 $db = "blog";
 
+$role = $_SESSION['ROLE'];
 
 // Pripojeni k databazi
 
@@ -22,6 +24,10 @@ $con = mysqli_connect($host,$username,$pass,$db);
 if (!$con || $con->connect_error) {
     die("Pripojeni k databazi selhalo!". $con->connect_error);
 }
+
+$sql = "SELECT * FROM opravneni";
+$data = mysqli_query($con,$sql);
+
 
 ?>
 
@@ -33,25 +39,16 @@ if (!$con || $con->connect_error) {
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
           integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/design.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.5.0-beta.2/css/lightgallery.min.css" integrity="sha512-J3GvWzuXtDGv7Kmqhj1gbn/jM2i3G40XtSBcqGEQ7eLpP0izHygFgT0FMIVCWMVRZnz7u2rS6mhTtlQ3oJsr1A==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script
-            src="https://code.jquery.com/jquery-3.6.0.js"
-            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-            crossorigin="anonymous"></script>
+        src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous"></script>
     <script src="js/bootstrap.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-          td {
-            border: 2px solid black;
-              width: 16.6%;
-              margin-top: 20px;
 
 
-        }
-          table { border: 1px solid black;
-
-
-          }
     </style>
 </head>
 <body>
@@ -191,75 +188,82 @@ echo "
 
 ?>
 
+<?php
+$sql = "SELECT * FROM opravneni WHERE role = '$role'";
+$dotazz = mysqli_query($con,$sql);
+while($radek1 = mysqli_fetch_assoc($dotazz)) {
+    $admin = $radek1['admin'];
+}
+
+
+if ($admin != "1") {
+    header("location:../main.php");
+
+} else {
+
+?>
+
 <div class="container">
-  <div class="row">
-  
-  <div class="col-xl-10" style="margin-left: 20%"><h2>Vítejte <?php echo $_SESSION['NAME']; ?> Navigujte se pomocí bočního menu</h2></div>
-      <div class="col-xl-5" style="margin-left: 20%"><h1>Vase nakreslene planky:</h1></div>
+    <div class="row">
+        <div class="col-xl-10">
 
-      <div class="content clearfix">
-          <div class="card-group" style="margin-top: 20px; margin-left: 20%" id="obrazky">
-   <?php
-   $jmeno = $_SESSION['NAME'];
-   $sql = "SELECT * FROM planky WHERE jmeno = '$jmeno'";
-   $dotaz = mysqli_query($con,$sql);
+            <table class='table table-bordered'>
+                <thead>
+                <tr>
+                    <th scope='col'>Role</th>
+                    <th scope='col'>Vtv Prispevek</th>
+                    <th scope='col'>Upr Prispevek</th>
+                    <th scope='col'>Smz Prispevek</th>
+                    <th scope='col'>Upr Uzivatel</th>
+                    <th scope='col'>Smz Uzivatel</th>
+                    <th scope='col'>Vtv Kategorie</th>
+                    <th scope='col'>Upr Kategorie</th>
+                    <th scope='col'>Smz Kategorie</th>
+                    <th scope='col'>Upravit</th>
+                    <th scope="col">Smazat</th>
+                </tr>
+                </thead>
+<?php
+
+while ($radek = mysqli_fetch_assoc($data)) {
+$role = $radek ['role'];
+$prispevek1 = $radek['vtv_prispevek'];
+$prispevek2 = $radek['upr_prispevek'];
+$prispevek3 = $radek['smz_prispevek'];
+$uzivatel1 = $radek['upr_uzivatel'];
+$uzivatel2 = $radek['smz_uzivatel'];
+$kategorie1 = $radek['vtv_kategorie'];
+$kategorie2 = $radek['upr_kategorie'];
+$kategorie3 = $radek['smz_kategorie'];
+?>
+
+                   <tbody>
+                   <tr>
+                       
+                       <td><?php echo "$role"?></td>
+                       <td><?php echo "$prispevek1"?> </td>
+                       <td><?php echo "$prispevek2"?></td>
+                       <td><?php echo "$prispevek3"?></td>
+                       <td><?php echo "$uzivatel1"?></td>
+                       <td><?php echo "$uzivatel2"?></td>
+                       <td><?php echo "$kategorie1"?></td>
+                       <td><?php echo"$kategorie2"?></td>
+                       <td><?php echo "$kategorie3"?></td>
+                       <td><a href="../sprava/upravit_pravomoce.php?role=<?php echo $radek['role']; ?>"><i class="fas fa-cog"></i> Upravit</a></td>
+                       <td><a href="../sprava/smazat_roli.php?role=<?php echo $radek['role']; ?>"><i class="fas fa-cog"></i> Smazat</a></td>
+                   </tr>
+                   
+                   </tbody>
 
 
-   $cislo = 0;
-
-   while ($radek = mysqli_fetch_assoc($dotaz)) {
-       $planek = $radek['planek'];
-                    $uzivatel = $radek['jmeno'];
-                    $id = $radek['ID'];
-                    $vytvoren = $radek['vytvoren'];
-                    $popis = $radek['popis'];
-
-
-           $upravit ="<a href='../sprava/upravit_canvas.php?id=$id'> Upravit  </a>";
-           //$smazat ="<a href='../sprava/smazat_canvas.php?id=$id'> Smazat </a>";
-
-
-
-                    echo "
-           <div class='card'>
-           <div class='obrazky'>
-                <img class='card-img-top' src='./$planek' alt='$planek' id='obrz'>
-                </div>
-                <div class='card-body'>
-                    <h5 class='card-title'>$uzivatel</h5>
-                    <p class='card-text'>$popis</p>
-                    <p class='card-text'><small class='text-muted'>$vytvoren</small></p>
-                    <p class='card-text'><small class='text-muted'>$upravit </small></p>
-                </div>
-            </div> 
-           ";
-                    $cislo++;
-                    if ($cislo % 3 == 0) {
-                        echo "</div><div class='card-group' id='obrazky' style='margin-top: 20px; margin-left: 20%'>";
-                    }
-                }
-
-
-
-
-   ?>
-     </div>
-   </div>
-  </div>
+<?php }
+}
+ob_end_flush();
+?>
+            </table>
+        </div>
+    </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.5.0-beta.2/lightgallery.min.js" integrity="sha512-Z3EF+OVry8EO1N1EFn6/j1v+PQJ3UqRJ3X+PEFHhJRd7sbEbxI2mZ1suHiXPiofaH7GiKrIZewfGpO+G98Kq5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script> var elements = document.getElementsByClassName('obrazky');
-    for (let item of elements) {
-        lightGallery(item, {
-            share:false,
-            controls:false,
-            counter:false,
-            enableDrag:false,
-
-        })
-    }
-</script>
 </body>
 </html>
-
